@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheater App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content-search">
+            <div class="search">
+                <input type="text" placeholder="enter city name here..." spellcheck="false">
+                <button class="btn-search"><img src="img/search-icn.png" alt="" class="icon-search"></button>
+            </div>
+            <h1 class="nama">ARYAMOCHA</h1>
+        </div>
+        <div class="error">
+            <p>Invalid City Name</p>
+        </div>
+        <div class="general-info">
+            <div class="container-card">
+                <div class="wheater-content">
+                    <div class="card-wheater">
+                        <div class="wheater">
+                            <img src="img/clear.png" class="img-wheater">
+                            <div class="wheater-info">
+                                <h2 class="city">City Name</h2>
+                                <h1 class="temp">100°C</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-content">
+                    <div class="card-humidity">
+                        <div class="humidity">
+                            <img src="img/humidity.png" >
+                            <div class="humidity-info">
+                                <h2 class="name-info">HUMIDITY</h2>
+                                <h1 class="percent">100%</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-wind">
+                        <div class="wind">
+                            <img src="img/wind.png" >
+                            <div class="wind-info">
+                                <h2 class="name-info">WIND SPEED</h2>
+                                <h1 class="kmh">100.00 km/h</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    const apiKey = "73af7e4f4d1e63958ac087715416609a";
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+
+    const searchBox = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button");
+    const WeatherIcon = document.querySelector(".img-wheater");
+    
+    async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+
+        if(response.status == 404){
+            document.querySelector(".error").style.display = "block";
+        } else {
+            let data = await response.json();
+
+        // console.log(data);
+
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+        document.querySelector(".percent").innerHTML = data.main.humidity + "%";
+        document.querySelector(".kmh").innerHTML = data.wind.speed + " km/h";
+
+        if(data.weather[0].main == "Clouds") {
+            WeatherIcon.src = "img/clouds.png";
+        } else  if(data.weather[0].main == "Clear") {
+            WeatherIcon.src = "img/clear.png";
+        } else if(data.weather[0].main == "Rain"){
+            WeatherIcon.src = "img/rain.png";
+        } else if(data.weather[0].main == "Drizzle") {
+            WeatherIcon.src = "img/drizzle.png";
+        } else if(data.weather[0].main == "Mist") {
+            WeatherIcon.src = "img/mist.png";
+        }
+
+        document.querySelector(".error").style.display = "none";
+        }
+
+
+    }
+
+    searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+    });
+
+</script>
+
+</body>
+</html>
