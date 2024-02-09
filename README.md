@@ -1,4 +1,3 @@
 # Wheater-App
-
-<h1>USING :</h1>
+<p>Wheater App with API</p> 
 <p>HTML, CSS, JS</p>
